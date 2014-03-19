@@ -1,0 +1,39 @@
+#!/usr/bin/python
+
+import sys
+
+if len(sys.argv) <= 2 or (len(sys.argv[2]) != 2 and len(sys.argv[2]) != 4): 
+	print('Error: Please provide two arguments.')
+	print(' Arg1: Shellcode:   Ex: \\x31\\x12\\x14')
+	print(' Arg2: Byte to Xor: Ex: 0xAA or AA')
+	sys.exit()
+
+shellcode = sys.argv[1]
+shellcode = shellcode.translate(None, "\\x")
+
+ebyte = sys.argv[2]
+if len(ebyte) > 2:
+	ebyte = ebyte[len(ebyte)-2:len(ebyte)]
+ebyte = bytearray.fromhex(ebyte)[0]
+
+encoded = ""
+encoded2 = ""
+
+for byte in bytearray.fromhex(shellcode):
+	y = byte^ebyte
+	encoded += '\\x'
+	encoded += '%02x' % y
+
+	encoded2 += '0x'
+	encoded2 += '%02x,' % y
+
+print('')
+print('Encoding Input with XOR...')
+print('')
+print('Length of Encode: %s' % str(len(bytearray(shellcode)) / 2))
+print('')
+print('Encode #1: %s' % encoded)
+print('')
+print('Encode #2: %s' % encoded2[0:len(encoded2)-1])
+print('')
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#if [ -e $(pwd)/$1 ]
+if [[ $1 =~ \.c$ ]]
+then
+  file=${1%.*}
+else
+  file=$1
+fi
+
+echo '[+] Compiling Shellcode...: ' $file
+#nasm -f elf32 $(pwd)/$file.nasm -c $(pwd)/$file.o
+gcc -fno-stack-protector -z execstack $file.c -o $file
+echo '[+] Compile Complete!'

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#if [ -e $(pwd)/$1 ]
+if [[ $1 =~ \.nasm$ ]]
+then
+  file=${1%.*}
+else
+  file=$1
+fi
+
+echo '[+] Assembling: ' $file
+nasm -f elf32 $(pwd)/$file.nasm -o $(pwd)/$file.o
+
+echo '[+] Linking: ' $file
+gcc $(pwd)/$file.o -o $(pwd)/$file
+
+echo '[+] Cleaning up...'
+rm $(pwd)/$file.o
+
+echo '[+] Complete!'
